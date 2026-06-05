@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>20 Years Old 🎂!!!</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
+   <style>
+      /* --- Base Layout Styles --- */
+      #mainTitle {
+        font-size: 32px;
+        font-family: 'Pixelify Sans', sans-serif;
+        margin-bottom: 8px;
+      }
+
+      #subTitle {
+        font-size: 18px;
+        font-family: 'Pixelify Sans', sans-serif;
+        color: #555;
+      }
+
+      #manualBlowButton {
+        margin-top: 12px;
+      }
+
+      /* --- Intro View Setup --- */
+      .intro-container {
+        position: relative;
+        z-index: 1005;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        text-align: center;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        padding: 20px;
+        overflow: hidden;
+      }
+
+      /* Base state for all text lines */
+      .intro-text {
+        position: absolute;
+        width: 100%;
+        max-width: 800px;
+        text-align: center;
+        font-family: 'Pixelify Sans', sans-serif;
+        font-size: 36px;
+        color: #333;
+        
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease, visibility 0.8s;
+      }
+
+      /* Scrolling upward entry */
+      .intro-text.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      /* Smoothly exit upward */
+      .intro-text.fade-out {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-30px);
+      }
+
+      /* Force preceding text to vanish instantly so it doesn't leave a ghost shadow behind the birthday text */
+      .intro-text.vanish-instantly.fade-out {
+        transition: none !important;
+        opacity: 0 !important;
+        transform: translateY(-50px) !important;
+      }
+
+      /* --- Custom Special Birthday Text Rules --- */
+      .intro-text.special-birthday-text {
+        font-weight: 700;
+        color: #333; 
+        
+        /* Inherits the clean transition pace from .intro-text automatically */
+        font-size: clamp(2.5rem, 8vw, 5.5rem); 
+      }
+      
+      .skip-btn {
+        position: absolute;
+        bottom: 40px;
+        z-index: 2010;
+      }
+    </style>
+  </head>
+  <body>
+    <audio id="bgMusic" loop>
+      <source src="bg_music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="gateView" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fae6d6; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Pixelify Sans', sans-serif;">
+      <h1 style="font-size: 2.5rem; margin-bottom: 20px; color: #333; text-align: center; padding: 0 20px;">You have a special message!</h1>
+      <button id="enterBtn" style="
+        padding: 18px 40px; 
+        font-size: 1.6rem; 
+        font-family: 'Pixelify Sans', sans-serif; 
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        background: #fae6d6; 
+        color: #333; 
+        border: 4px solid #333; 
+        border-radius: 0px; 
+        cursor: pointer; 
+        position: relative;
+        box-shadow: 0px 8px 0px #333; 
+        transition: all 0.1s ease;
+        text-shadow: 1px 1px 0px #fff;
+      ">Press Me</button>
+
+      <style>
+        #enterBtn:hover {
+          background: #f2c8a8 !important; /* Fixed subtle hover shift theme */
+          transform: translateY(2px);
+          box-shadow: 0px 6px 0px #333 !important;
+        }
+        #enterBtn:active {
+          transform: translateY(8px) !important;
+          box-shadow: 0px 0px 0px #333 !important;
+        }
+      </style>
+    </div>
+
+    <div id="introView" class="intro-container" style="display: none;">
+      <div class="intro-text">Hiii</div>
+      <div class="intro-text">Today is a very very special day!!</div>
+      <div class="intro-text">I've been talking about for many days</div>
+      <div class="intro-text">So you definitely know what day it is today!</div>
+      <div class="intro-text vanish-instantly">It is your birthday!</div>
+      <div class="intro-text special-birthday-text">Happy Birthday Anvita!!!</div>
+      <div class="intro-text">A very very warm birthday wishes from your best friend!!!</div>
+      <div class="intro-text">Enjoy this day to the fullest and always be happy!</div>
+      <div class="intro-text">May this year bring you endless joy and success</div>
+      <div class="intro-text">Let's move to the next part. Shall we?</div>
+      <button id="skipIntroBtn" class="skip-btn">Skip Intro &rarr;</button>
+    </div>
+
+    <div class="container" id="cakeView" style="display: none; opacity: 0; transition: opacity 1s;">
+      <div id="birthdayText"></div>
+      <div class="cake-container">
+        <div class="cake" id="cake"></div>
+      </div>
+    </div>
+
+    <button id="envelopeBtn" class="top-right-icon" aria-label="Open letter" style="display: none; opacity: 0; transition: opacity 1s;">✉️</button>
+
+    <div class="letter-container" id="letterView" style="display: none;">
+      <button id="backBtn" class="back-btn">&larr; Back to Cake</button>
+      
+      <div id="envelopeContainer" class="envelope-wrapper" aria-label="Envelope">
+        <div class="envelope-back"></div>
+        
+        <div class="letter-paper">
+          <p>Dear <span id="letterName"></span>,</p>
+          <p>Wishing you the happiest of birthdays!</p>
+          <p>
+            Take time to celebrate all the wonderful things that make you, you. 
+            I'm so grateful to have you in my life as a best friend. 
+            You have a heart of gold and a spirit that shines bright.
+            Always be happy and keep shining bright like the star you are!!!
+            Today is your day, enjoy fully and make unforgettable memories.
+            The more you praise and celebrate your life, the more there is in life to celebrate.
+          </p>
+          <p>
+            I've written a small poem for your birthday :
+          </p>
+          <p>
+            I wish I could gift you something as bright as sunshine today,
+            but hopefully this birthday wish does the trick instead.
+            You have a gift for healing,
+            with words as warm as nature's spring.
+            Your golden heart and bright demeanor
+            always manage to make things well.
+            All of nature's beauty shines through your eyes and lives in your heart.
+            Cheers to your new year ahead. Happy Birthday!
+          </p>
+          <p style="margin-top: 24px;">Warmly,</p>
+          <p>Srishanth</p>
+          <p>
+
+
+
+
+
+            .
+          </p>
+        </div>
+
+        <svg class="envelope-front-svg" viewBox="0 0 340 220" preserveAspectRatio="none">
+          <path 
+            d="M 2 2 L 170 120 L 338 2 L 338 218 L 2 218 Z" 
+            fill="#f2c8a8" 
+            stroke="#333" 
+            stroke-width="4" 
+            stroke-linejoin="round" 
+          />
+        </svg>
+
+        <svg class="envelope-flap-svg" viewBox="0 0 340 130" preserveAspectRatio="none">
+          <path 
+            d="M 2 2 L 338 2 L 170 128 Z" 
+            fill="#fae6d6" 
+            stroke="#333" 
+            stroke-width="4" 
+            stroke-linejoin="round" 
+          />
+        </svg>
+      </div>
+      
+      <p id="envelopeHint" class="envelope-hint">Tap envelope to open</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const name = "Anvita";
+      let candleCount = parseInt(params.get("candles")) || 4;
+      candleCount = Math.min(Math.max(candleCount, 1), 30);
+
+      const cake = document.getElementById("cake");
+      let candlesAlreadyBlown = false;
+
+      const birthdayText = document.getElementById("birthdayText");
+      birthdayText.innerHTML = `
+        <div id="mainTitle">Happy Birthday, ${name}!!!</div>
+        <div id="subTitle">Make a wish and blow candles.</div>
+        <button id="manualBlowButton" type="button">Blow now</button>
+      `;
+      const manualBlowButton = document.getElementById("manualBlowButton");
+      
+      document.getElementById("letterName").textContent = name;
+      const envelopeBtn = document.getElementById("envelopeBtn");
+      const cakeView = document.getElementById("cakeView");
+      const letterView = document.getElementById("letterView");
+      const backBtn = document.getElementById("backBtn");
+      const envelopeContainer = document.getElementById("envelopeContainer");
+      const envelopeHint = document.getElementById("envelopeHint");
+
+      envelopeBtn.addEventListener("click", () => {
+        cakeView.style.transition = "none";
+        envelopeBtn.style.transition = "none";
+        cakeView.style.display = "none";
+        envelopeBtn.style.display = "none";
+        cakeView.style.opacity = "0";
+        envelopeBtn.style.opacity = "0";
+        letterView.style.display = "flex";
+      });
+
+      backBtn.addEventListener("click", () => {
+        letterView.style.display = "none";
+        cakeView.style.transition = "opacity 0.5s";
+        envelopeBtn.style.transition = "opacity 0.5s";
+        cakeView.style.display = "flex";
+        envelopeBtn.style.display = "grid";
+        setTimeout(() => {
+          cakeView.style.opacity = "1";
+          envelopeBtn.style.opacity = "1";
+        }, 50);
+      });
+
+      envelopeContainer.addEventListener("click", () => {
+        envelopeContainer.classList.add("is-open");
+        if (envelopeHint) {
+          envelopeHint.style.visibility = "hidden";
+        }
+      });
+
+      const colors = [
+        "green-candle",
+        "purple-candle",
+        "blue-candle",
+        "yellow-candle",
+      ];
+      const CAKE_VISUAL_WIDTH = 35;
+
+      function createCandles(count) {
+        cake.innerHTML = "";
+        const CANDLE_VISUAL_WIDTH = 2;
+        const availableWidth = CAKE_VISUAL_WIDTH;
+        const candlesPerRow = 6;
+        const rowCount = Math.ceil(count / candlesPerRow);
+        const shiftAmount = 4;
+
+        for (let i = 0; i < count; i++) {
+          const candle = document.createElement("div");
+          candle.classList.add("candle");
+          const colorClass = colors[Math.floor(Math.random() * colors.length)];
+          candle.classList.add(colorClass);
+
+          const row = Math.floor(i / candlesPerRow);
+          const col = i % candlesPerRow;
+          const totalCandlesInRow = Math.min(
+            candlesPerRow,
+            count - row * candlesPerRow
+          );
+          const rowSpacing = availableWidth / (totalCandlesInRow + 1);
+
+          const leftBase = rowSpacing * (col + 1) - CANDLE_VISUAL_WIDTH / 2 + 5;
+          const rowShift = row % 2 === 0 ? 0 : shiftAmount;
+
+          candle.style.position = "absolute";
+          candle.style.top = `${10 + row * 3}px`;
+          candle.style.left = `${leftBase - rowShift + 4}px`;
+
+          cake.appendChild(candle);
+        }
+      }
+
+      createCandles(candleCount);
+
+      function blowOutCandles() {
+        if (candlesAlreadyBlown) {
+          return;
+        }
+
+        candlesAlreadyBlown = true;
+        manualBlowButton.disabled = true;
+        manualBlowButton.textContent = "Blown!";
+
+        const candles = document.querySelectorAll(".candle");
+        candles.forEach((candle) => {
+          const delay = Math.random() * 1000;
+          setTimeout(() => {
+            colors.forEach((color) => {
+              if (candle.classList.contains(color)) {
+                candle.classList.add("blown");
+              }
+            });
+          }, delay);
+        });
+
+        setTimeout(() => {
+          const subTitle = document.getElementById("subTitle");
+          subTitle.textContent = `Yayyyyyy! Wishing you a great year ahead!!!🥳`;
+        }, 1200);
+      }
+
+      manualBlowButton.addEventListener("click", blowOutCandles);
+      
+      // === Intro Sequence Logic ===
+      const introView = document.getElementById("introView");
+      const introTexts = document.querySelectorAll(".intro-text");
+      const skipIntroBtn = document.getElementById("skipIntroBtn");
+      const bgMusic = document.getElementById("bgMusic");
+      const gateView = document.getElementById("gateView");
+      const enterBtn = document.getElementById("enterBtn");
+      
+      let currentIntroIndex = 0;
+      let introTimeout;
+
+      function showNextIntro() {
+        if (currentIntroIndex > 0 && currentIntroIndex <= introTexts.length) {
+          introTexts[currentIntroIndex - 1].classList.remove("active");
+          introTexts[currentIntroIndex - 1].classList.add("fade-out");
+        }
+
+        if (currentIntroIndex < introTexts.length) {
+          introTexts[currentIntroIndex].classList.add("active");
+          
+          if (introTexts[currentIntroIndex].classList.contains("special-birthday-text")) {
+            var duration = 3500;
+            var end = Date.now() + duration;
+
+            (function frame() {
+              confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                zIndex: 1000
+              });
+              confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                zIndex: 1000
+              });
+
+              if (Date.now() < end) {
+                requestAnimationFrame(frame);
+              }
+            }());
+          }
+
+          currentIntroIndex++;
+          introTimeout = setTimeout(showNextIntro, 3500); 
+        } else {
+          endIntro();
+        }
+      }
+
+      function endIntro() {
+        clearTimeout(introTimeout);
+        introView.style.transition = "opacity 1s";
+        introView.style.opacity = "0";
+        
+        setTimeout(() => {
+          introView.style.display = "none";
+          cakeView.style.display = "flex";
+          envelopeBtn.style.display = "grid";
+          setTimeout(() => {
+            cakeView.style.opacity = "1";
+            envelopeBtn.style.opacity = "1";
+          }, 50);
+        }, 1000);
+      }
+
+      skipIntroBtn.addEventListener("click", endIntro);
+
+      enterBtn.addEventListener("click", () => {
+        if (bgMusic) {
+          bgMusic.play().catch(err => console.log("Audio playback error:", err));
+        }
+        gateView.style.display = "none";
+        introView.style.display = "flex";
+        setTimeout(showNextIntro, 400);
+      });
+    </script>
+  </body>
+</html>
