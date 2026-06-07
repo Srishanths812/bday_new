@@ -7159,3 +7159,41 @@ body {
   /* Keeps it beautifully massive */
   font-size: clamp(2.5rem, 8vw, 5.5rem); 
 }
+
+#clickHereBtn{
+    position:fixed;
+    right:20px;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:10000;
+    padding:12px 20px;
+    font-family:'Pixelify Sans',sans-serif;
+    font-size:18px;
+    cursor:pointer;
+}
+
+#videoOverlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.9);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:50000;
+}
+
+#birthdayVideo{
+    max-width:90%;
+    max-height:90%;
+}
+
+#closeVideo{
+    position:absolute;
+    top:20px;
+    right:20px;
+    font-size:30px;
+    cursor:pointer;
+}

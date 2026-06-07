@@ -101,6 +101,12 @@
     </style>
   </head>
   <body>
+    <button id="clickHereBtn">Click Here :(</button>
+    <div id="videoPage" style="display:none;">
+        <video id="birthdayVideo" controls autoplay style="width:100vw;height:100vh;object-fit:contain;">
+            <source src="video.mp4" type="video/mp4">
+        </video>
+    </div>
     <audio id="bgMusic" loop>
       <source src="bg_music.mp3" type="audio/mpeg">
     </audio>
@@ -230,6 +236,9 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script>
+      document.getElementById("clickHereBtn").addEventListener("click",()=>{
+          window.location.href="video.html";
+      });
       const params = new URLSearchParams(window.location.search);
       const name = "Anvita";
       let candleCount = parseInt(params.get("candles")) || 4;
